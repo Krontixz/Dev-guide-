@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Level 2: The Megaphone Anatomy</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px; background: #0d1117; color: #c9d1d9; }
+        .lesson-header { border-bottom: 2px solid #30363d; margin-bottom: 30px; }
+        h1 { color: #58a6ff; font-size: 2.5rem; }
+        .code-container { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        textarea { width: 100%; height: 100px; background: #010409; color: #79c0ff; font-family: 'Fira Code', monospace; padding: 15px; border: 1px solid #444; border-radius: 5px; font-size: 16px; resize: none; }
+        button { background: #238636; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .output-box { background: #000; color: #39FF14; padding: 15px; border-radius: 5px; margin-top: 15px; font-family: monospace; min-height: 20px; border: 1px solid #222; }
+        .mistake { background: rgba(255, 123, 114, 0.1); border-left: 5px solid #ff7b72; padding: 15px; margin: 20px 0; }
+        .next-btn { display: block; text-align: center; background: #1f6feb; color: white; padding: 15px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="lesson-header">
+        <h1>Level 2: The Megaphone Anatomy</h1>
+        <p><i>Learning the grammar of Backend Engineering.</i></p>
+    </div>
+
+    <h3>1. What is an Argument?</h3>
+    <p>Everything inside the parentheses <code>()</code> is called an <b>Argument</b>. Think of the <code>print</code> command as a delivery truck, and the arguments as the packages inside.</p>
+
+    <div class="code-container">
+        <h3>Interactive Sandbox: Multiple Packages</h3>
+        <p>You can print multiple things by using a <b>Comma (,)</b>. This tells Python: "Do this, AND also do this."</p>
+        <p><b>TASK:</b> Change the code to print your name and your dream salary: <code>print("Name:", 200000)</code></p>
+        <textarea id="editor2">print("Package 1", "Package 2")</textarea>
+        <button onclick="runPython('editor2', 'output2')">Send Delivery</button>
+        <div id="output2" class="output-box">Output will appear here...</div>
+    </div>
+
+    <div class="mistake">
+        <strong>⚠️ Common Mistake:</strong> Forgetting the comma! If you write <code>print("Hello" "World")</code>, Python might crash or smash them together. The comma is the "glue" that keeps arguments organized.
+    </div>
+
+    <h3>2. Ways to Remember</h3>
+    <ul>
+        <li><b>The Parentheses:</b> The megaphone's mouth.</li>
+        <li><b>The Quotes:</b> The actual sound.</li>
+        <li><b>The Comma:</b> The breath between words.</li>
+    </ul>
+
+    <a href="03_the_separator_secret.html" class="next-btn">Next Lesson: 03 - The Separator Secret →</a>
+
+    <script>
+        async function runPython(editorId, outputId) {
+            const output = document.getElementById(outputId);
+            const code = document.getElementById(editorId).value;
+            output.innerText = "Processing...";
+            if (!window.pyodide) window.pyodide = await loadPyodide();
+            try {
+                await pyodide.runPythonAsync(`import sys, io\nsys.stdout = io.StringIO()`);
+                await pyodide.runPythonAsync(code);
+                output.innerText = pyodide.runPython("sys.stdout.getvalue()") || "Success";
+            } catch (err) {
+                output.innerText = "ERROR: " + err;
+            }
+        }
+    </script>
+</body>
+</html>
