@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Level 4: Breaking the Line</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 40px; background: #0d1117; color: #c9d1d9; }
+        .lesson-header { border-bottom: 2px solid #30363d; margin-bottom: 30px; }
+        h1 { color: #58a6ff; font-size: 2.5rem; }
+        .code-container { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        textarea { width: 100%; height: 100px; background: #010409; color: #79c0ff; font-family: 'Fira Code', monospace; padding: 15px; border: 1px solid #444; border-radius: 5px; font-size: 16px; resize: none; }
+        button { background: #238636; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .output-box { background: #000; color: #39FF14; padding: 15px; border-radius: 5px; margin-top: 15px; font-family: monospace; min-height: 20px; border: 1px solid #222; }
+        .next-btn { display: block; text-align: center; background: #1f6feb; color: white; padding: 15px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="lesson-header">
+        <h1>Level 4: Breaking the Line (\n)</h1>
+        <p><i>The secret code for vertical space.</i></p>
+    </div>
+
+    <h3>1. Escape Characters</h3>
+    <p>Sometimes you want to hit "Enter" inside a string of text. In Python, we use the <b>Backslash (\)</b> to create "Escape Characters."</p>
+    <ul>
+        <li><code>\n</code> = New Line (Like hitting Enter).</li>
+        <li><code>\t</code> = Tab (Adds a big space).</li>
+    </ul>
+
+    <div class="code-container">
+        <h3>Interactive Sandbox: The Stacked Print</h3>
+        <p><b>TASK:</b> Create a "Loading" list. Use <code>\n</code> so each item appears on a new line inside <b>one single print statement</b>.</p>
+        <textarea id="editor4">print("Loading Search...\nLoading Images...\nLoading Maps...")</textarea>
+        <button onclick="runPython('editor4', 'output4')">Execute Stack</button>
+        <div id="output4" class="output-box">Output will appear here...</div>
+    </div>
+
+    <h3>2. The "Newborn" Explanation</h3>
+    <p>Imagine you are typing a text message. If you want to go to the next line, you hit the return button. <code>\n</code> is the "Invisible Finger" that hits the return button for the computer.</p>
+
+    <h3>3. Common Mistakes</h3>
+    <p><b>The Wrong Slash:</b> Beginners often use <code>/n</code> (Forward slash). It won't work! It must be the <b>Backslash</b> <code>\n</code>.</p>
+
+    <a href="05_the_memory_locker.html" class="next-btn">Next Lesson: 05 - The Memory Locker →</a>
+
+    <script>
+        async function runPython(editorId, outputId) {
+            const output = document.getElementById(outputId);
+            const code = document.getElementById(editorId).value;
+            output.innerText = "Processing...";
+            if (!window.pyodide) window.pyodide = await loadPyodide();
+            try {
+                await pyodide.runPythonAsync(`import sys, io\nsys.stdout = io.StringIO()`);
+                await pyodide.runPythonAsync(code);
+                output.innerText = pyodide.runPython("sys.stdout.getvalue()") || "Success";
+            } catch (err) {
+                output.innerText = "ERROR: " + err;
+            }
+        }
+    </script>
+</body>
+</html>
